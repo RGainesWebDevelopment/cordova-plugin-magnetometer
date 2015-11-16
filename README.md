@@ -19,12 +19,46 @@ Installation
 
 <code> cordova plugin add https://github.com/sdesalas/cordova-plugin-magnetometer </code>
 
+Constants
+-------
+- cordova.plugins.magnetometer.SENSOR_DELAY_FASTEST (0 microsecond)
+- cordova.plugins.magnetometer.SENSOR_DELAY_GAME (20,000 microsecond)
+- cordova.plugins.magnetometer.SENSOR_DELAY_UI (60,000 microsecond)
+- cordova.plugins.magnetometer.SENSOR_DELAY_NORMAL (200,000 microseconds)
 
 Methods
 -------
 - cordova.plugins.magnetometer.getReading
+- cordova.plugins.magnetometer.setSamplingPeriod
 - cordova.plugins.magnetometer.watchReadings
 - cordova.plugins.magnetometer.stop
+
+
+cordova.plugins.magnetometer.setSamplingPeriod
+-------------------------------------------
+
+Sets frequency in microseconds at which magnetometer sensor readings should be updated.
+
+<pre>
+<code>
+  cordova.plugins.magnetometer.setSamplingPeriod(
+    function success(reading){
+      console.log(JSON.stringify(reading)); 
+      // Output: {x: 23.113, y:-37.245, z:6.172, magnitude: 44.266}
+    }, 
+    function error(message){
+     console.log(message);
+    },
+    cordova.plugins.magnetometer.SENSOR_DELAY_NORMAL // Constant indicating frequency in microseconds at which magnetometer sensor readings should be updated.
+  )
+</code>
+</pre>
+
+`reading` object properties:
+- `x`
+- `y`
+- `z`
+- `magnitude` (calculated total - always positive)
 
 
 cordova.plugins.magnetometer.getReading
@@ -46,12 +80,6 @@ Gets a single reading from the magenetometer sensor.
 </code>
 </pre>
 
-`reading` object properties:
-- `x`
-- `y`
-- `z`
-- `magnitude` (calculated total - always positive)
-
 
 cordova.plugins.magnetometer.watchReadings
 -------------------------------------------
@@ -67,7 +95,8 @@ Gets regular magnetometer readings sent by the internal sensor, will fire succes
     }, 
     function error(message){
      console.log(message);
-    }
+    },
+    {frequency:40} // Frequency in ms to check magnetometer sensor readings.
   )
 </code>
 </pre>
