@@ -56,6 +56,7 @@ public class Magnetometer extends CordovaPlugin implements SensorEventListener  
 
     private SensorManager sensorManager;// Sensor manager
     Sensor mSensor;                     // Magnetic sensor returned by sensor manager
+    int samplingPeriodUs = SensorManager.SENSOR_DELAY_NORMAL;   // The rate sensor events are delivered at.
 
     private CallbackContext callbackContext;
     List<CallbackContext> watchContexts;
@@ -114,7 +115,25 @@ public class Magnetometer extends CordovaPlugin implements SensorEventListener  
                 }, 2000);
             }
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, getReading()));
-        } else {
+        }
+        else if (action.equals("setSamplingPeriod")) {
+            this.stop();
+            this.samplingPeriodUs = args.getLong(0);
+            int r = this.start();
+            if (r == Magnetometer.ERROR_FAILED_TO_START) {
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.IO_EXCEPTION, Magnetometer.ERROR_FAILED_TO_START));
+                    return false;
+            }
+            // Set a timeout callback on the main thread.
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    Magnetometer.this.timeout();
+                }
+            }, 2000);
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, getReading()));
+        }
+        else {
             // Unsupported action
             return false;
         }
@@ -144,7 +163,7 @@ public class Magnetometer extends CordovaPlugin implements SensorEventListener  
         // If found, then register as listener
         if (list != null && list.size() > 0) {
             this.mSensor = list.get(0);
-            this.sensorManager.registerListener(this, this.mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            this.sensorManager.registerListener(this, this.mSensor, this.samplingPeriodUs);
             this.lastAccessTime = System.currentTimeMillis();
             this.setStatus(Magnetometer.STARTING);
         }
