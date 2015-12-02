@@ -260,6 +260,10 @@ public class Magnetometer extends CordovaPlugin implements SensorEventListener  
     private JSONObject getReading() throws JSONException {
         JSONObject obj = new JSONObject();
 
+        // Update the last accessed time so that the sensor listener
+        // is kept active
+        this.lastAccessTime = System.currentTimeMillis();
+
         obj.put("x", this.x);
         obj.put("y", this.y);
         obj.put("z", this.z);
