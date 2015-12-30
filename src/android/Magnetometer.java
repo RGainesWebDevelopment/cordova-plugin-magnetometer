@@ -118,7 +118,7 @@ public class Magnetometer extends CordovaPlugin implements SensorEventListener  
         }
         else if (action.equals("setSamplingPeriod")) {
             this.stop();
-            this.samplingPeriodUs = args.getLong(0);
+            this.samplingPeriodUs = (int) args.getLong(0);
             int r = this.start();
             if (r == Magnetometer.ERROR_FAILED_TO_START) {
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.IO_EXCEPTION, Magnetometer.ERROR_FAILED_TO_START));
@@ -259,6 +259,10 @@ public class Magnetometer extends CordovaPlugin implements SensorEventListener  
      */
     private JSONObject getReading() throws JSONException {
         JSONObject obj = new JSONObject();
+
+        // Update the last accessed time so that the sensor listener
+        // is kept active
+        this.lastAccessTime = System.currentTimeMillis();
 
         obj.put("x", this.x);
         obj.put("y", this.y);

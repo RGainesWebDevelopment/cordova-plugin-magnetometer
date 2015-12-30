@@ -8,11 +8,11 @@ var Magnetometer = function(){
 }
 
 Magnetometer.prototype = {
-  SENSOR_DELAY_FASTEST = 0,
-  SENSOR_DELAY_GAME = 1,
-  SENSOR_DELAY_UI = 2,
-  SENSOR_DELAY_NORMAL = 3,
-  setSamplingPeriod(successCallback, errorCallback, period){
+  SENSOR_DELAY_FASTEST: 0,
+  SENSOR_DELAY_GAME: 1,
+  SENSOR_DELAY_UI: 2,
+  SENSOR_DELAY_NORMAL: 3,
+  setSamplingPeriod: function(successCallback, errorCallback, period){
       cordova.exec(successCallback, errorCallback, "Magnetometer", "getReading", [period]);
   },
   getReading: function(successCallback, errorCallback){
