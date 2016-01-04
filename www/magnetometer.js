@@ -29,7 +29,7 @@ Magnetometer.prototype = {
       // executes callback directly from sensor listener.
       timers[id] = window.setInterval(function() {
           magnetometer.getReading(successCallback, errorCallback);
-      }, options.period); // every 40 ms (25 fps)
+      }, frequency); // every 40 ms (25 fps)
     } 
     else cordova.exec(successCallback, errorCallback, "Magnetometer", "watchReadings", []);
     return id;
