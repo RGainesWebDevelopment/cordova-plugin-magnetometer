@@ -38,6 +38,7 @@ cordova.plugins.magnetometer.setSamplingPeriod
 -------------------------------------------
 
 Sets frequency in microseconds at which magnetometer sensor readings should be updated.
+(Note that this method is only implemented on Android)
 
 <pre>
 <code>
